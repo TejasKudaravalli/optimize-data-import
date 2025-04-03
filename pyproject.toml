@@ -1,0 +1,16 @@
+[project]
+name = "optimize-data-import"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aiofiles>=24.1.0",
+    "asyncpg>=0.30.0",
+    "jupyter>=1.1.1",
+    "loguru>=0.7.3",
+    "orjson>=3.10.15",
+    "rich>=13.9.4",
+    "tqdm>=4.67.1",
+    "zstandard>=0.23.0",
+]

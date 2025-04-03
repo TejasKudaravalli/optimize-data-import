@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  postgres:
+    container_name: my-postgres
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres  # Change this for security
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    deploy:
+      resources:
+        limits:
+          cpus: "5.0"
+          memory: "4GB"
+
+  script-runner:
+    container_name: script-runner
+    build: 
+      context: ./script-runner
+    depends_on:
+      - postgres
+    volumes:
+      - ./sql:/sql  # Mounts your shell scripts
+    entrypoint: ["/sql/run.sh"]  # Runs the script on container start
+    environment:
+      PGHOST: my-postgres
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: postgres
+    deploy:
+      resources:
+        limits:
+          cpus: "5.0"
+          memory: "4GB"
+    command: ["/bin/bash"]
+
+volumes:
+  pg_data:
+    driver: local
